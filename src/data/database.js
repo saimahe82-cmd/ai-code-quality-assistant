@@ -102,8 +102,23 @@ export function loginUser(email, password) {
     user.lastLogin = new Date().toISOString();
     saveToStorage();
 
+    // Store successful login email if needed for "Remember me"
+    // (Actual logic will be in the component, but we provide the tool)
+
     const { password: _, ...safeUser } = user;
     return { success: true, message: 'Login successful!', user: safeUser };
+}
+
+/**
+ * Get a user by their ID.
+ * @param {string} id
+ * @returns {Object|null}
+ */
+export function getUserById(id) {
+    const user = users.find(u => u.id === id);
+    if (!user) return null;
+    const { password, ...safeUser } = user;
+    return safeUser;
 }
 
 /**

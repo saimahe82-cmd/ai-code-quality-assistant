@@ -11,12 +11,13 @@ import {
 export default function LoginPage() {
     const { setCurrentUser } = useApp();
 
-    const [email, setEmail] = useState('');
+    const [email, setEmail] = useState(() => localStorage.getItem('codementor_rememberedEmail') || '');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [apiError, setApiError] = useState('');
+    const [rememberMe, setRememberMe] = useState(() => !!localStorage.getItem('codementor_rememberedEmail'));
 
     const validate = () => {
         const newErrors = {};
@@ -45,6 +46,13 @@ export default function LoginPage() {
             setIsSubmitting(false);
 
             if (result.success) {
+                // Handle "Remember Me"
+                if (rememberMe) {
+                    localStorage.setItem('codementor_rememberedEmail', email);
+                } else {
+                    localStorage.removeItem('codementor_rememberedEmail');
+                }
+
                 // Save user to context & localStorage
                 setCurrentUser(result.user);
             } else {
@@ -169,7 +177,12 @@ export default function LoginPage() {
                         {/* Remember Me & Forgot */}
                         <div className="login-options-row">
                             <label className="login-remember">
-                                <input type="checkbox" className="login-checkbox" />
+                                <input
+                                    type="checkbox"
+                                    className="login-checkbox"
+                                    checked={rememberMe}
+                                    onChange={(e) => setRememberMe(e.target.checked)}
+                                />
                                 <span>Remember me</span>
                             </label>
                             <a href="#" className="login-forgot" onClick={e => e.preventDefault()}>

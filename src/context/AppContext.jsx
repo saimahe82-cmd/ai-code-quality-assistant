@@ -1,7 +1,7 @@
 import { createContext, useContext, useState, useCallback, useEffect } from 'react';
 import { analyzeCode, generateRefactorings, generateFlowchart, predictBugs, checkPlagiarism } from '../utils/analysisEngine';
 import { sampleCorpus } from '../data/sampleData';
-import { saveCodeHistory, getCodeHistory } from '../data/database';
+import { saveCodeHistory, getCodeHistory, getUserById } from '../data/database';
 import { hasApiKey, getAICodeAnalysis } from '../utils/openaiService';
 
 const AppContext = createContext();
@@ -44,6 +44,15 @@ export function AppProvider({ children }) {
             localStorage.removeItem('codementor_currentUser');
         }
     }, []);
+
+    const syncCurrentUser = useCallback(() => {
+        if (currentUser?.id) {
+            const freshUser = getUserById(currentUser.id);
+            if (freshUser) {
+                setCurrentUser(freshUser);
+            }
+        }
+    }, [currentUser?.id, setCurrentUser]);
 
     const logout = useCallback(() => {
         setCurrentUser(null);
@@ -205,6 +214,7 @@ export function AppProvider({ children }) {
             };
             const updatedHistory = saveCodeHistory(currentUser.id, historyEntry);
             setAnalysisHistory(updatedHistory);
+            syncCurrentUser(); // Sync user data (e.g. analysisCount)
         }
 
         setIsAnalyzing(false);
