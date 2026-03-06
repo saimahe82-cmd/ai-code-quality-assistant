@@ -11,7 +11,7 @@ const DEFAULT_API_KEY = '';
 
 export function getApiKey() {
     try {
-        return localStorage.getItem('codementor_openai_key') || DEFAULT_API_KEY;
+        return localStorage.getItem('codewhiz_openai_key') || DEFAULT_API_KEY;
     } catch {
         return DEFAULT_API_KEY;
     }
@@ -20,9 +20,9 @@ export function getApiKey() {
 export function setApiKey(key) {
     try {
         if (key) {
-            localStorage.setItem('codementor_openai_key', key.trim());
+            localStorage.setItem('codewhiz_openai_key', key.trim());
         } else {
-            localStorage.removeItem('codementor_openai_key');
+            localStorage.removeItem('codewhiz_openai_key');
         }
     } catch (e) {
         console.error('Failed to save API key:', e);

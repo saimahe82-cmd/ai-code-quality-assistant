@@ -9,7 +9,7 @@ let users = [];
 // ─── Load from localStorage on init ───
 function loadFromStorage() {
     try {
-        const stored = localStorage.getItem('codementor_users');
+        const stored = localStorage.getItem('codewhiz_users');
         if (stored) {
             users = JSON.parse(stored);
         }
@@ -22,7 +22,7 @@ function loadFromStorage() {
 // ─── Save to localStorage ───
 function saveToStorage() {
     try {
-        localStorage.setItem('codementor_users', JSON.stringify(users));
+        localStorage.setItem('codewhiz_users', JSON.stringify(users));
     } catch (e) {
         console.error('Failed to save users to storage:', e);
     }
@@ -199,7 +199,7 @@ const MAX_HISTORY_ENTRIES = 100;
  * @returns {string}
  */
 function getUserHistoryKey(userId) {
-    return `codementor_history_${userId}`;
+    return `codewhiz_history_${userId}`;
 }
 
 /**

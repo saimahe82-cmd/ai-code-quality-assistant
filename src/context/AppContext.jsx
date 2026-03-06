@@ -29,7 +29,7 @@ export function AppProvider({ children }) {
     // ─── Authentication State ───
     const [currentUser, setCurrentUserState] = useState(() => {
         try {
-            const saved = localStorage.getItem('codementor_currentUser');
+            const saved = localStorage.getItem('codewhiz_currentUser');
             return saved ? JSON.parse(saved) : null;
         } catch {
             return null;
@@ -39,9 +39,9 @@ export function AppProvider({ children }) {
     const setCurrentUser = useCallback((user) => {
         setCurrentUserState(user);
         if (user) {
-            localStorage.setItem('codementor_currentUser', JSON.stringify(user));
+            localStorage.setItem('codewhiz_currentUser', JSON.stringify(user));
         } else {
-            localStorage.removeItem('codementor_currentUser');
+            localStorage.removeItem('codewhiz_currentUser');
         }
     }, []);
 

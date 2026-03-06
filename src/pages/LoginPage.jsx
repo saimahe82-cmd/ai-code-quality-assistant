@@ -11,13 +11,13 @@ import {
 export default function LoginPage() {
     const { setCurrentUser } = useApp();
 
-    const [email, setEmail] = useState(() => localStorage.getItem('codementor_rememberedEmail') || '');
+    const [email, setEmail] = useState(() => localStorage.getItem('codewhiz_rememberedEmail') || '');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [errors, setErrors] = useState({});
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [apiError, setApiError] = useState('');
-    const [rememberMe, setRememberMe] = useState(() => !!localStorage.getItem('codementor_rememberedEmail'));
+    const [rememberMe, setRememberMe] = useState(() => !!localStorage.getItem('codewhiz_rememberedEmail'));
 
     const validate = () => {
         const newErrors = {};
@@ -48,9 +48,9 @@ export default function LoginPage() {
             if (result.success) {
                 // Handle "Remember Me"
                 if (rememberMe) {
-                    localStorage.setItem('codementor_rememberedEmail', email);
+                    localStorage.setItem('codewhiz_rememberedEmail', email);
                 } else {
-                    localStorage.removeItem('codementor_rememberedEmail');
+                    localStorage.removeItem('codewhiz_rememberedEmail');
                 }
 
                 // Save user to context & localStorage
