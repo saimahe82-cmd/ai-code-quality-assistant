@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeMentor AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            width: 400px;
+            min-height: 500px;
+            max-height: 600px;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0a0e18;
+            color: #e8eaf0;
+            overflow: hidden;
+        }
+
+        /* ─── Header ─── */
+        .header {
+            padding: 16px 20px;
+            background: linear-gradient(135deg, #6c5ce7, #00cec9);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .header-title .logo {
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+        }
+
+        .header-badge {
+            font-size: 9px;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* ─── Tab Bar ─── */
+        .tabs {
+            display: flex;
+            background: #0f1420;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            font-size: 11px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            color: #8b93a7;
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s;
+            font-family: inherit;
+        }
+
+        .tab:hover {
+            color: #e8eaf0;
+        }
+
+        .tab.active {
+            color: #a78bfa;
+            border-bottom-color: #6c5ce7;
+            background: rgba(108, 92, 231, 0.05);
+        }
+
+        /* ─── Content ─── */
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .content::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .content::-webkit-scrollbar-thumb {
+            background: rgba(108, 92, 231, 0.2);
+            border-radius: 4px;
+        }
+
+        /* ─── Code Input ─── */
+        .code-input {
+            width: 100%;
+            min-height: 140px;
+            max-height: 200px;
+            background: #141922;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 12px 14px;
+            color: #a5f3c0;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 12px;
+            line-height: 1.6;
+            resize: vertical;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .code-input:focus {
+            border-color: #6c5ce7;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.1);
+        }
+
+        .code-input::placeholder {
+            color: #4a5068;
+        }
+
+        .lang-row {
+            display: flex;
+            gap: 8px;
+            margin: 10px 0;
+            align-items: center;
+        }
+
+        .lang-select {
+            flex: 1;
+            padding: 8px 12px;
+            background: #141922;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            color: #e8eaf0;
+            font-family: inherit;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .lang-select:focus {
+            border-color: #6c5ce7;
+        }
+
+        /* ─── Buttons ─── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 10px 18px;
+            border: none;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #6c5ce7, #a78bfa);
+            color: white;
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00b894, #00cec9);
+            color: white;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .btn-row .btn {
+            flex: 1;
+            padding: 9px 12px;
+            font-size: 12px;
+        }
+
+        /* ─── Results ─── */
+        .result-card {
+            background: #141922;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 10px;
+            padding: 14px;
+            margin-top: 12px;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            font-size: 13px;
+        }
+
+        .score-badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .score-high {
+            background: rgba(0, 184, 148, 0.15);
+            color: #55efc4;
+        }
+
+        .score-med {
+            background: rgba(253, 203, 110, 0.15);
+            color: #fdcb6e;
+        }
+
+        .score-low {
+            background: rgba(255, 107, 107, 0.15);
+            color: #ff7675;
+        }
+
+        .issue-item {
+            padding: 8px 12px;
+            margin-top: 6px;
+            border-radius: 8px;
+            font-size: 12px;
+            line-height: 1.5;
+            border-left: 3px solid;
+        }
+
+        .issue-error {
+            background: rgba(255, 107, 107, 0.06);
+            border-left-color: #ff7675;
+            color: #ff7675;
+        }
+
+        .issue-warning {
+            background: rgba(253, 203, 110, 0.06);
+            border-left-color: #fdcb6e;
+            color: #fdcb6e;
+        }
+
+        .issue-info {
+            background: rgba(116, 185, 255, 0.06);
+            border-left-color: #74b9ff;
+            color: #74b9ff;
+        }
+
+        .issue-suggestion {
+            background: rgba(108, 92, 231, 0.06);
+            border-left-color: #a78bfa;
+            color: #a78bfa;
+        }
+
+        .no-issues {
+            text-align: center;
+            padding: 20px;
+            color: #55efc4;
+            font-size: 13px;
+        }
+
+        /* ─── Chat ─── */
+        .chat-area {
+            display: flex;
+            flex-direction: column;
+            height: 370px;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+
+        .chat-msg {
+            max-width: 85%;
+            padding: 8px 12px;
+            margin: 4px 0;
+            border-radius: 12px;
+            font-size: 12px;
+            line-height: 1.6;
+            animation: slideUp 0.2s ease-out;
+        }
+
+        .chat-msg.bot {
+            background: #1a1f2e;
+            color: #e8eaf0;
+            align-self: flex-start;
+            border-bottom-left-radius: 4px;
+        }
+
+        .chat-msg.user {
+            background: #6c5ce7;
+            color: white;
+            align-self: flex-end;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-input-row {
+            display: flex;
+            gap: 6px;
+            padding-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 9px 14px;
+            background: #141922;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            color: #e8eaf0;
+            font-family: inherit;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .chat-input:focus {
+            border-color: #6c5ce7;
+        }
+
+        .chat-send {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, #6c5ce7, #a78bfa);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+
+        /* ─── Settings ─── */
+        .setting-group {
+            margin-bottom: 16px;
+        }
+
+        .setting-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #8b93a7;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .setting-input {
+            width: 100%;
+            padding: 9px 14px;
+            background: #141922;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 8px;
+            color: #e8eaf0;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            outline: none;
+        }
+
+        .setting-input:focus {
+            border-color: #6c5ce7;
+        }
+
+        .setting-note {
+            font-size: 10px;
+            color: #4a5068;
+            margin-top: 4px;
+        }
+
+        .status-msg {
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            margin-top: 8px;
+        }
+
+        .status-msg.success {
+            background: rgba(0, 184, 148, 0.1);
+            color: #55efc4;
+        }
+
+        .status-msg.error {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff7675;
+        }
+
+        /* ─── Footer ─── */
+        .footer {
+            padding: 10px 20px;
+            text-align: center;
+            font-size: 10px;
+            color: #4a5068;
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+        }
+
+        .footer a {
+            color: #a78bfa;
+            text-decoration: none;
+        }
+
+        /* ─── Spinner ─── */
+        .spinner {
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            display: inline-block;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <div class="header">
+        <div class="header-title">
+            <div class="logo">⚡</div>
+            CodeMentor AI
+        </div>
+        <span class="header-badge">v1.0</span>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab active" data-tab="analyze">🔍 Analyze</button>
+        <button class="tab" data-tab="chat">💬 Chat</button>
+        <button class="tab" data-tab="settings">⚙️ Settings</button>
+    </div>
+
+    <!-- ═══ ANALYZE TAB ═══ -->
+    <div class="content" id="tab-analyze">
+        <textarea class="code-input" id="code-input"
+            placeholder="Paste code here or right-click selected code on any page..." spellcheck="false"></textarea>
+
+        <div class="lang-row">
+            <select class="lang-select" id="lang-select">
+                <option value="auto">Auto-detect</option>
+                <option value="python">Python</option>
+                <option value="javascript">JavaScript</option>
+                <option value="java">Java</option>
+                <option value="c">C/C++</option>
+            </select>
+        </div>
+
+        <div class="btn-row">
+            <button class="btn btn-primary" id="analyze-btn">🔍 Analyze</button>
+            <button class="btn btn-success" id="interpret-btn">▶ Interpret</button>
+        </div>
+
+        <div id="results-area"></div>
+    </div>
+
+    <!-- ═══ CHAT TAB ═══ -->
+    <div class="content hidden" id="tab-chat">
+        <div class="chat-area">
+            <div class="chat-messages" id="chat-messages">
+                <div class="chat-msg bot">
+                    👋 Hi! I'm CodeMentor AI. Ask me anything about coding — errors, concepts, debugging tips, or paste
+                    code for analysis!
+                </div>
+            </div>
+            <div class="chat-input-row">
+                <input class="chat-input" id="chat-input" placeholder="Ask me anything..." />
+                <button class="chat-send" id="chat-send">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SETTINGS TAB ═══ -->
+    <div class="content hidden" id="tab-settings">
+        <div class="setting-group">
+            <div class="setting-label">🔑 OpenAI API Key</div>
+            <input type="password" class="setting-input" id="api-key-input" placeholder="sk-..." />
+            <div class="setting-note">🔒 Stored locally. Enables AI-powered analysis and chat.</div>
+            <div class="btn-row" style="margin-top: 8px;">
+                <button class="btn btn-primary" id="save-key-btn" style="font-size: 12px; padding: 8px;">Save
+                    Key</button>
+            </div>
+            <div id="key-status"></div>
+        </div>
+
+        <div class="setting-group">
+            <div class="setting-label">About</div>
+            <div style="font-size: 12px; color: #8b93a7; line-height: 1.6;">
+                <strong>CodeMentor AI</strong> is your AI-powered code quality assistant.<br><br>
+                ✦ Analyze code for errors, style issues, and bugs<br>
+                ✦ AI-powered chat with OpenAI integration<br>
+                ✦ Right-click any code on a webpage to analyze it<br>
+                ✦ Works with Python, JavaScript, Java, and C/C++
+            </div>
+        </div>
+
+        <div class="setting-group">
+            <div class="setting-label">Open Full App</div>
+            <button class="btn btn-primary" id="open-app-btn" style="font-size: 12px; padding: 8px;">
+                🌐 Open CodeMentor Website
+            </button>
+        </div>
+    </div>
+
+    <div class="footer">
+        Built with ❤️ by CodeMentor AI · <a href="#" id="website-link">Open Full Website</a>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+/* CodeMentor AI — Floating Button Styles */
+
+.codementor-float-btn {
+    position: fixed;
+    z-index: 2147483647;
+    padding: 6px 14px;
+    background: linear-gradient(135deg, #6c5ce7, #a78bfa);
+    color: white;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(108, 92, 231, 0.4), 0 0 0 1px rgba(108, 92, 231, 0.2);
+    transition: all 0.2s ease;
+    user-select: none;
+    animation: codementor-pop 0.2s ease-out;
+}
+
+.codementor-float-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 25px rgba(108, 92, 231, 0.5), 0 0 0 1px rgba(108, 92, 231, 0.3);
+}
+
+@keyframes codementor-pop {
+    from {
+        opacity: 0;
+        transform: scale(0.8) translateY(5px);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}

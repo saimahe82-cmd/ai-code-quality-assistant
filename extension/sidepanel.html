@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeMentor AI — Side Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #0a0e18;
+            color: #e8eaf0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #6c5ce7, #00cec9);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .header-logo {
+            width: 24px;
+            height: 24px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .header-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .header-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 4px;
+        }
+
+        .header-btn {
+            width: 28px;
+            height: 28px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 6px;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        iframe {
+            flex: 1;
+            border: none;
+            width: 100%;
+        }
+
+        .fallback {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 24px;
+        }
+
+        .fallback-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(108, 92, 231, 0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 16px;
+        }
+
+        .fallback-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        .fallback-desc {
+            font-size: 13px;
+            color: #8b93a7;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .fallback-btn {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, #6c5ce7, #a78bfa);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
+        }
+
+        .fallback-btn:hover {
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <div class="header-logo">⚡</div>
+        <span class="header-title">CodeMentor AI</span>
+        <div class="header-actions">
+            <button class="header-btn" id="open-full" title="Open in new tab">🔗</button>
+            <button class="header-btn" id="reload-btn" title="Reload">🔄</button>
+        </div>
+    </div>
+
+    <iframe id="app-frame" src="http://localhost:5173" style="display:none;"></iframe>
+
+    <div class="fallback" id="fallback" style="display:none;">
+        <div class="fallback-icon">⚡</div>
+        <div class="fallback-title">CodeMentor AI</div>
+        <div class="fallback-desc">
+            The CodeMentor web app isn't running locally.<br>
+            Start the dev server or use the popup instead.
+        </div>
+        <button class="fallback-btn" onclick="window.location.reload()">Retry Connection</button>
+    </div>
+
+    <script>
+        const frame = document.getElementById('app-frame');
+        const fallback = document.getElementById('fallback');
+
+        // Try to load the app; if it fails, show fallback
+        frame.addEventListener('load', () => {
+            frame.style.display = 'block';
+            fallback.style.display = 'none';
+        });
+
+        frame.addEventListener('error', () => {
+            frame.style.display = 'none';
+            fallback.style.display = 'flex';
+        });
+
+        // Timeout fallback — if iframe doesn't load in 5 seconds
+        setTimeout(() => {
+            try {
+                if (!frame.contentDocument && !frame.contentWindow) {
+                    frame.style.display = 'none';
+                    fallback.style.display = 'flex';
+                }
+            } catch (e) {
+                // Cross-origin — means it loaded!
+                frame.style.display = 'block';
+                fallback.style.display = 'none';
+            }
+        }, 5000);
+
+        // Check for pending actions
+        chrome.storage.local.get(['pendingCode', 'pendingAction'], (result) => {
+            if (result.pendingCode) {
+                // Wait for iframe to load then pass code
+                frame.addEventListener('load', () => {
+                    try {
+                        frame.contentWindow.postMessage({
+                            type: 'codementor-inject',
+                            action: result.pendingAction,
+                            code: result.pendingCode
+                        }, '*');
+                    } catch (e) {
+                        console.log('Could not inject code into iframe');
+                    }
+                    chrome.storage.local.remove(['pendingAction', 'pendingCode']);
+                });
+            }
+        });
+
+        document.getElementById('open-full').addEventListener('click', () => {
+            chrome.tabs.create({ url: 'http://localhost:5173' });
+        });
+
+        document.getElementById('reload-btn').addEventListener('click', () => {
+            frame.src = frame.src;
+        });
+    </script>
+</body>
+
+</html>
