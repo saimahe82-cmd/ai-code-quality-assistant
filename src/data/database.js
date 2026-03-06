@@ -190,7 +190,7 @@ function getUserHistoryKey(userId) {
 /**
  * Save a code analysis entry to a user's personal history.
  * @param {string} userId - The user's unique ID
- * @param {Object} entry - { code, language, score, issueCount, issueTypes, analysisResult }
+ * @param {Object} entry - { code, language, score, issueCount, issueTypes, issues, analysisResult }
  * @returns {Array} The updated history array
  */
 export function saveCodeHistory(userId, entry) {
@@ -218,6 +218,7 @@ export function saveCodeHistory(userId, entry) {
         score: entry.score || 0,
         issueCount: entry.issueCount || 0,
         issueTypes: entry.issueTypes || {},
+        issues: entry.issues || [],
         codeSnippet: (entry.code || '').slice(0, 200), // Short preview
         lineCount: (entry.code || '').split('\n').length,
     };

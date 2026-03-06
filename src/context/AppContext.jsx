@@ -116,21 +116,6 @@ export function AppProvider({ children }) {
             }
         }
 
-        // Save to per-user history
-        if (result.score && currentUser?.id) {
-            const entry = {
-                code: codeToAnalyze,
-                language: result.language,
-                score: result.score.overall,
-                issueCount: (result.issues?.length || 0),
-                issueTypes: result.issues?.reduce((acc, issue) => {
-                    acc[issue.category] = (acc[issue.category] || 0) + 1;
-                    return acc;
-                }, {}) || {}
-            };
-            const updatedHistory = saveCodeHistory(currentUser.id, entry);
-            setAnalysisHistory(updatedHistory);
-        }
 
         // 2. If OpenAI key is configured, also run AI analysis
         if (hasApiKey()) {
@@ -199,6 +184,27 @@ export function AppProvider({ children }) {
                 console.error('AI analysis failed:', err);
                 setAiError(err.message);
             }
+        }
+
+        // Final Save to per-user history (after local + AST + optional AI)
+        // Note: For simplicity, we use the values available at this point in the function
+        const currentResult = analyzeCode(codeToAnalyze, langToUse); // Recalculate or use reactive state? 
+        // Recalculating is safer than relying on state which hasn't updated yet.
+
+        if (currentUser?.id) {
+            const historyEntry = {
+                code: codeToAnalyze,
+                language: currentResult.language || langToUse,
+                score: currentResult.score.overall,
+                issueCount: currentResult.issues.length,
+                issues: currentResult.issues,
+                issueTypes: currentResult.issues.reduce((acc, issue) => {
+                    acc[issue.category] = (acc[issue.category] || 0) + 1;
+                    return acc;
+                }, {})
+            };
+            const updatedHistory = saveCodeHistory(currentUser.id, historyEntry);
+            setAnalysisHistory(updatedHistory);
         }
 
         setIsAnalyzing(false);

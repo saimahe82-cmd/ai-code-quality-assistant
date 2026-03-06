@@ -2,7 +2,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import {
     Code2, BarChart3, MessageSquare, Shield, BookOpen,
-    Home, Settings, Sparkles, Bug, GitBranch, Eye, LogOut
+    Home, Settings, Sparkles, Bug, GitBranch, Eye, LogOut, History
 } from 'lucide-react';
 
 export default function Sidebar() {
@@ -12,6 +12,7 @@ export default function Sidebar() {
     const navItems = [
         { path: '/', icon: <Home size={18} />, label: 'Dashboard', section: 'main' },
         { path: '/analyze', icon: <Code2 size={18} />, label: 'Code Analysis', section: 'main', badge: 'NEW' },
+        { path: '/history', icon: <History size={18} />, label: 'Analysis History', section: 'tools' },
         { path: '/visualize', icon: <GitBranch size={18} />, label: 'Visualization', section: 'tools' },
         { path: '/refactor', icon: <Sparkles size={18} />, label: 'Refactoring', section: 'tools' },
         { path: '/bugs', icon: <Bug size={18} />, label: 'Bug Prediction', section: 'tools' },

@@ -10,6 +10,7 @@ import BugsPage from './pages/BugsPage';
 import PlagiarismPage from './pages/PlagiarismPage';
 import ProgressPage from './pages/ProgressPage';
 import LearnPage from './pages/LearnPage';
+import HistoryPage from './pages/HistoryPage';
 import LoginPage from './pages/LoginPage';
 import SignUpPage from './pages/SignUpPage';
 import { Menu } from 'lucide-react';
@@ -38,6 +39,7 @@ function AppLayout() {
           <Route path="/visualize" element={<VisualizePage />} />
           <Route path="/refactor" element={<RefactorPage />} />
           <Route path="/bugs" element={<BugsPage />} />
+          <Route path="/history" element={<HistoryPage />} />
           <Route path="/plagiarism" element={<PlagiarismPage />} />
           <Route path="/progress" element={<ProgressPage />} />
           <Route path="/learn" element={<LearnPage />} />

@@ -4,17 +4,18 @@ import ScoreRing from './ScoreRing';
 import {
     AlertCircle, AlertTriangle, Info, Lightbulb,
     ChevronDown, ChevronUp, Zap, BookOpen, Shield,
-    CheckCircle2, XCircle, AlertOctagon
+    CheckCircle2, XCircle, AlertOctagon, Download
 } from 'lucide-react';
+import { generatePDFReport } from '../utils/reportGenerator';
 
 export default function AnalysisResults() {
-    const { analysisResult, mode, bugPredictions, aiError } = useApp();
+    const { analysisResult, mode, bugPredictions, aiError, currentUser, code, language } = useApp();
     const [activeTab, setActiveTab] = useState('issues');
     const [expandedIssue, setExpandedIssue] = useState(null);
 
     if (!analysisResult) return null;
 
-    const { issues, score, language, codeStatus, syntaxErrors = [], styleIssues = [], aiSummary, aiScore } = analysisResult;
+    const { issues, score, language: resultLanguage, codeStatus, syntaxErrors = [], styleIssues = [], aiSummary, aiScore } = analysisResult;
 
     const tabs = [
         { id: 'issues', label: 'Issues', count: issues.length },
@@ -110,16 +111,36 @@ export default function AnalysisResults() {
             {/* Summary Card */}
             <div className="card">
                 <div className="card-header">
-                    <div>
-                        <div className="card-title">
-                            <Zap size={18} style={{ color: 'var(--accent-primary)' }} />
-                            Analysis Results
+                    <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%', alignItems: 'center' }}>
+                        <div>
+                            <div className="card-title">
+                                <Zap size={18} style={{ color: 'var(--accent-primary)' }} />
+                                Analysis Results
+                            </div>
+                            <div className="card-subtitle">
+                                {issues.length === 0 ? 'No issues found! 🎉' : `${issues.length} issue${issues.length !== 1 ? 's' : ''} found in your ${resultLanguage} code`}
+                            </div>
                         </div>
-                        <div className="card-subtitle">
-                            {issues.length === 0 ? 'No issues found! 🎉' : `${issues.length} issue${issues.length !== 1 ? 's' : ''} found in your ${language} code`}
-                        </div>
+                        <button
+                            className="btn btn-outline"
+                            style={{
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '8px',
+                                padding: '6px 12px',
+                                fontSize: '13px'
+                            }}
+                            onClick={() => generatePDFReport({
+                                code,
+                                language: resultLanguage,
+                                analysisResult,
+                                user: currentUser
+                            })}
+                        >
+                            <Download size={14} />
+                            Download Report
+                        </button>
                     </div>
-                    {score && <ScoreRing score={score.overall} size={90} strokeWidth={6} label="" />}
                 </div>
 
                 {/* Severity Overview */}
