@@ -19,7 +19,8 @@
     "react-icons": "^5.6.0",
     "react-router-dom": "^7.13.1",
     "react-syntax-highlighter": "^16.1.1",
-    "recharts": "^3.7.0"
+    "recharts": "^3.7.0",
+    "vercel": "^50.28.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
