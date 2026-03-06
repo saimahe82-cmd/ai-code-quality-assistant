@@ -1,6 +1,6 @@
 {
     "manifest_version": 3,
-    "name": "CodeMentor AI — Code Quality Assistant",
+    "name": "Codewhiz — Code ",
     "version": "1.0.0",
     "description": "AI-powered code analysis, interpretation, and chatbot assistant. Analyze code quality, debug errors, and get AI-powered suggestions right from your browser.",
     "permissions": [
@@ -17,7 +17,7 @@
             "48": "icons/icon48.png",
             "128": "icons/icon128.png"
         },
-        "default_title": "CodeMentor AI"
+        "default_title": "Codewhiz"
     },
     "side_panel": {
         "default_path": "sidepanel.html"

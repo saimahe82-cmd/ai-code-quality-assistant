@@ -44,8 +44,8 @@ export default function Sidebar() {
                         <Code2 size={22} color="white" />
                     </div>
                     <div className="sidebar-logo-text">
-                        <span className="sidebar-logo-title">CodeMentor AI</span>
-                        <span className="sidebar-logo-subtitle">Quality Assistant</span>
+                        <span className="sidebar-logo-title">Codewhiz</span>
+                        <span className="sidebar-logo-subtitle"></span>
                     </div>
                 </div>
 

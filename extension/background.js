@@ -6,7 +6,7 @@
 chrome.runtime.onInstalled.addListener(() => {
     chrome.contextMenus.create({
         id: 'codementor-analyze',
-        title: '🔍 Analyze with CodeMentor AI',
+        title: '🔍 Analyze with Codewhiz',
         contexts: ['selection']
     });
 

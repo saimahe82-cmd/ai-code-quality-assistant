@@ -82,7 +82,7 @@ async function callOpenAI(messages, options = {}) {
 //  CHATBOT — AI-Powered Conversations
 // ═══════════════════════════════════════════════════════════════════════
 
-const CHAT_SYSTEM_PROMPT = `You are CodeMentor Bot — a friendly, encouraging, and expert AI coding assistant embedded in a code quality analysis tool called "CodeMentor AI".
+const CHAT_SYSTEM_PROMPT = `You are CodeMentor Bot — a friendly, encouraging, and expert AI coding assistant embedded in a code quality analysis tool called "Codewhiz".
 
 Your personality:
 - Be warm, supportive, and encouraging — like a patient mentor

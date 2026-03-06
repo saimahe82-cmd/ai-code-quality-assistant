@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════════════
-   CodeMentor AI — In-App User Database
+   Codewhiz — In-App User Database
    Stores user sign-up data in memory + localStorage for persistence
    ═══════════════════════════════════════════════════════════════════════ */
 

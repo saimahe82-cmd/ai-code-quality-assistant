@@ -18,7 +18,7 @@ export function generatePDFReport(data) {
     // ─── Header ───
     doc.setFontSize(22);
     doc.setTextColor(108, 92, 231); // Accent color
-    doc.text('CodeMentor AI - Analysis Report', 15, 20);
+    doc.text('Codewhiz - Analysis Report', 15, 20);
 
     doc.setFontSize(10);
     doc.setTextColor(100);
@@ -130,7 +130,7 @@ export function generatePDFReport(data) {
         doc.setFontSize(8);
         doc.setTextColor(150);
         doc.text(`Page ${i} of ${pageCount}`, pageWidth - 25, 290);
-        doc.text('Powered by CodeMentor AI Quality Assistant', 15, 290);
+        doc.text('Powered by Codewhiz ', 15, 290);
     }
 
     // Save the PDF

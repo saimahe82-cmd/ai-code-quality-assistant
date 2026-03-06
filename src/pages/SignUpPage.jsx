@@ -142,7 +142,7 @@ export default function SignUpPage() {
                         <div className="signup-logo-icon">
                             <Code2 size={28} color="white" />
                         </div>
-                        <h1 className="signup-brand-title">CodeMentor AI</h1>
+                        <h1 className="signup-brand-title">Codewhiz</h1>
                         <p className="signup-brand-subtitle">
                             Your AI-powered code quality companion
                         </p>
